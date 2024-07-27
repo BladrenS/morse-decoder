@@ -38,8 +38,35 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+   const morseArray = Object.entries(MORSE_TABLE).flat(2);
+   let arr = [...expr];
+   let decodedArr = [];
+   for (let i = 0; i < arr.length; i += 2) {
+      let symbol = arr[i] + arr[i + 1];
+      if (i % 10 === 0) decodedArr.push(' ');
+      if (symbol == '10') decodedArr.push('.');
+      if (symbol == '11') decodedArr.push('-');
+      if (symbol == '00') decodedArr.push(' ');
+      if (symbol == '**') {
+         decodedArr.push(' space ');
+         i += 8
+      }
+   }
+   let str = decodedArr.join('').replace(/next/gi, ' ').replace(/\s+/g, ' ').trim()
+   str = str.split(' ');
+   let result = '';
+   let index = 0;
+   for (let i = 0; i < str.length; i++) {
+      if (str[i] === 'space') result += ' ';
+      else {
+         index = morseArray.indexOf(str[i]);
+         result += morseArray[index + 1];
+      }
+   }
+   return result
 }
+
+decode("000000101100000011100000101010000010111100000000100000101110**********00001111110000001110**********000000001100101010100000000010**********00001010110010111010000000001100000010100000001111000000101100000000110000000010**********00111110110000101011000000001000001010100000000011000000101000001111110000001110**********00001111110010101110**********0010111010000000101000101011100000000010**********000000001100101010100000000010**********00001010110000001110000000101000101010110000000010000010111000001010100000000010**********000000101100000011100000111010**********0000000010001010101100000000100000101110001110111100000000110010101010000000101000000011100000111110**********00000010100000101010**********10101010111010111111")
 
 module.exports = {
     decode
